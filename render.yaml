@@ -1,0 +1,50 @@
+# Render.com Blueprint — deploys the API (and, once the UI is added to this
+# repo, the built frontend) as a single free Docker web service.
+# See docs/DEPLOYMENT_DISCUSSION.md for the reasoning behind these choices.
+#
+# Two env vars can't be set from a blueprint (Render requires secrets to be
+# entered by hand) — after the first deploy, set these in the Render
+# dashboard under this service's "Environment" tab:
+#   APP_KEY  -> generate locally with `php artisan key:generate --show`
+#   APP_URL  -> the https://xxxx.onrender.com URL Render assigns this service
+#
+# Known limitation of this free-tier demo setup: the service has no
+# persistent disk, so the SQLite database resets to empty (freshly migrated)
+# every time the container restarts — including the free plan's spin-down
+# after ~15 min idle. Fine for a demo; would need a paid persistent disk (or
+# a real managed database) to keep data across restarts.
+
+services:
+  - type: web
+    name: taskflow-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile.render
+    dockerContext: .
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /
+    envVars:
+      - key: APP_NAME
+        value: TaskFlow
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        sync: false
+      - key: APP_URL
+        sync: false
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: DB_DATABASE
+        value: /var/www/html/database/database.sqlite
+      - key: CACHE_STORE
+        value: file
+      - key: SESSION_DRIVER
+        value: file
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: LOG_CHANNEL
+        value: stack
+      - key: LOG_LEVEL
+        value: error
