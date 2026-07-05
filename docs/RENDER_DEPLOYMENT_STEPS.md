@@ -47,16 +47,23 @@ through the real deploy.
 
 ## After first successful deploy
 
-- **Base URL changes** from `http://localhost:8000` (local-only) to the Render
-  URL. `README.md`, `docs/API.md`, and `docs/INSTALLATION.md` currently
-  hardcode `localhost:8000` — update these (or document both local + deployed
-  URLs) once the Render URL is confirmed working. Not done yet — say the word
-  and this can be updated.
+- **Base URL updated** — `README.md` and `docs/API.md` now reference the live
+  Render URL (`https://taskflow-api-648g.onrender.com`) instead of `localhost:8000`.
+  `docs/INSTALLATION.md` was deleted (it only ever described local setup paths).
 - **Known limitation, already accepted for this demo**: free plan has no
   persistent disk, so the SQLite DB resets to empty on every container
   restart (deploys, and the free tier's spin-down after ~15 min idle).
+- **Seeding not enabled on the deployed instance** — `entrypoint.sh` only runs
+  `migrate --force`, not `db:seed`, so the demo admin/manager accounts from
+  `DatabaseSeeder.php` don't exist on Render yet. Registering via `/auth/register`
+  works today (confirmed in Postman); ask if you want `db:seed --force` added to
+  the entrypoint so the demo accounts exist after every restart too.
 
 ## Status log
 
 - 2026-07-05 — Blueprint step 1 (choose service) completed, GitHub connected
   successfully.
+- 2026-07-05 — First deploy live at `https://taskflow-api-648g.onrender.com`;
+  register/login confirmed working via Postman.
+- 2026-07-05 — Local Docker dev environment removed entirely (see
+  `DEPLOYMENT_DISCUSSION.md`); Render is now the only way to run/test this app.

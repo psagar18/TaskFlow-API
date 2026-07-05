@@ -18,12 +18,12 @@ class DatabaseSeeder extends Seeder
     {
         $admin = User::factory()->admin()->create([
             'name' => 'Admin User',
-            'email' => 'sagar@gmail.com',
+            'email' => 'admin@taskflow.test',
         ]);
 
         $manager = User::factory()->manager()->create([
             'name' => 'Manager User',
-            'email' => 'ami@gmail.com',
+            'email' => 'manager@taskflow.test',
         ]);
 
         $members = User::factory()->count(5)->create();

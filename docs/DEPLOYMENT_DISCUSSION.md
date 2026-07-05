@@ -129,3 +129,19 @@ not a surprise.
    and `APP_URL` in the Render dashboard, then trigger a manual redeploy.
 
 No GitHub access, no CI changes, no account setup has been performed by Claude.
+
+## Local dev environment removed (2026-07-05)
+
+Once the Render deployment was confirmed working, the local Docker dev setup was
+removed entirely — Render is now the only way to run/test this app (no more local
+server for day-to-day coding):
+
+- Deleted: `docker-compose.yml`, `Dockerfile` (local multi-stage), `docker/` (nginx
+  config), `dev.sh`.
+- `.env.example` switched to `DB_CONNECTION=sqlite` (MySQL-specific vars removed) to
+  match what Render actually runs.
+- `docs/INSTALLATION.md` (Docker & local-PHP setup guide) deleted — no longer applicable.
+- `README.md` and `docs/API.md` now only reference the deployed URL, not `localhost`.
+
+`Dockerfile.render`, `deploy/render/entrypoint.sh`, and `render.yaml` are unaffected —
+those are Render-specific and were never part of the local setup.
