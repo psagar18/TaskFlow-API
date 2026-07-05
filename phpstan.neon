@@ -1,0 +1,16 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app
+
+    level: 6
+
+    ignoreErrors:
+        -
+            # Sanctum's stubs type currentAccessToken() as non-nullable, but it returns
+            # null whenever the request wasn't authenticated via a personal access token
+            # (e.g. session guard). The nullsafe call is intentional defensive code.
+            message: '#Using nullsafe method call on non-nullable type Laravel\\Sanctum\\PersonalAccessToken#'
+            path: app/Services/AuthService.php
